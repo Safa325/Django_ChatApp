@@ -1,0 +1,105 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.mdl-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.page-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 64px;
+    background-color: #f5f5f5;
+    max-height: calc(100vh - 56px);
+    height: 100%;
+}
+
+.mdl-layout__drawer-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.chat, .login-notice {
+    width: 100%;
+    max-width: 640px;
+    margin: 20px 0;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.chat {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    max-height: 70vh;
+    height: 100%;
+}
+
+.chat-messages {
+    overflow-y: auto;
+    flex-grow: 1;
+    margin-bottom: 16px;
+    padding: 10px;
+    max-height: 300px;
+}
+
+.chat-message {
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+}
+
+.chat-message strong {
+    color: #3f51b5;
+}
+
+.mdl-card__actions {
+    display: flex;
+    align-items: center;
+}
+
+.mdl-textfield {
+    flex-grow: 1;
+    margin-right: 8px;
+}
+
+.mdl-button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.login-notice {
+    padding: 16px;
+    text-align: center;
+}
+
+.input-field{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

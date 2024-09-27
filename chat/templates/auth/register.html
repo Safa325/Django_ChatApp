@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="login-container mdl-shadow--2dp">
+        <h2 class="mdl-typography--headline">Registrieren</h2>
+        <form method="post" action="/register/">
+            {% csrf_token %}
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="username" name="username" required>
+                <label class="mdl-textfield__label" for="username">Benutzername</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="first_name" name="first_name" required>
+                <label class="mdl-textfield__label" for="first_name">Vorname</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="last_name" name="last_name" required>
+                <label class="mdl-textfield__label" for="last_name">Nachname</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="email" id="email" name="email" required>
+                <label class="mdl-textfield__label" for="email">E-Mail-Adresse</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="password" id="password" name="password" required>
+                <label class="mdl-textfield__label" for="password">Passwort</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="password" id="password_confirm" name="password_confirm" required>
+                <label class="mdl-textfield__label" for="password_confirm">Passwort bestätigen</label>
+            </div>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                Registrieren
+            </button>
+        </form>
+        <div style="text-align:center; margin-top: 20px;">
+            <p>Schon registriert? <a href="/login/" class="mdl-button mdl-js-button mdl-button--accent">Hier einloggen</a></p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,56 +1,92 @@
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-<style>
-    .page-content{
-        display: flex;
-        padding: 64px;
-        justify-content: center;
-        align-items: center;
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        {% if request.user.is_authenticated %}
+            <div class="chat mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Chatroom</h2>
+                </div>
+                <div class="mdl-card__supporting-text chat-messages" id="chatMessages">
+                    {% for message in messages %}
+                    <div class="chat-message">
+                        <p>{{ message.created_at }}</p> <strong>{{ message.author.first_name }}:</strong> {{ message.text }}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+<script>
+
+    window.onload = scrollToBottom()
+
+    function getFormattedDate() {
+        const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+        const date = new Date();
+        const month = months[date.getMonth()];
+        const day = date.getDate();
+        const year = date.getFullYear();
+        
+        return `${month} ${day}, ${year}`;
     }
 
-</style>
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 
-<!-- Always shows a header, even in smaller screens. -->
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header">
-      <div class="mdl-layout__header-row">
-        <!-- Title -->
-        <span class="mdl-layout-title">Welcome, {{ request.user.first_name }}!</span>
-        <!-- Add spacer, to align navigation to the right -->
-        <div class="mdl-layout-spacer"></div>
-        <!-- Navigation. We hide it in small screens. -->
-        <nav class="mdl-navigation mdl-layout--large-screen-only">
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-          <a class="mdl-navigation__link" href="">Link</a>
-        </nav>
-      </div>
-    </header>
-    <div class="mdl-layout__drawer">
-      <span class="mdl-layout-title">Chatroom</span>
-      <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-      </nav>
-    </div>
-    <main class="mdl-layout__content">
-      <div class="page-content">
-
-        <!-- Simple Textfield -->
-        <form action="#">
-            <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" type="text" id="sample1">
-            <label class="mdl-textfield__label" for="sample1">Text...</label>
+    async function sendMessage() {
+        let date = getFormattedDate()
+        let fd = new FormData();
+        let token = "{{ csrf_token }}"
+        fd.append('textMessage',messageField.value)
+        fd.append('csrfmiddlewaretoken', token )
+        try{
+            chatMessages.innerHTML += `
+            <div class="chat-message" id="deleteMessage">
+                <p>${date}</p> <strong>{{ request.user.first_name }}:</strong> <i>${messageField.value}</i>
             </div>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                Send
-            </button>
-        </form>
-        
-      </div>
-    </main>
-  </div>
+            `
+            scrollToBottom()
+            let response = await fetch('/chat/',{
+                method: 'POST',
+                body: fd
+            })
+
+            let json = await response.json()
+            let parse = JSON.parse(json)
+            let date_json = parse[0].fields.created_at
+            let text = parse[0].fields.text
+
+            console.log('text', text, 'date',date_json)
+      
+            document.getElementById('deleteMessage').remove()
+            chatMessages.innerHTML += `
+            <div class="chat-message">
+                <p>${date}</p> <strong>{{ request.user.first_name }}:</strong> ${text}
+            </div>
+            `
+            messageField.value = ''
+        } catch (err){
+            console.error(err)
+        }
+    }
+
+    
+</script>
+
+
+                    <form method="post" onsubmit="sendMessage(); return false;">
+                        {% csrf_token %}
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label input-field">
+                            <input class="mdl-textfield__input" name="textMessage" type="text" id="messageField" required>
+                            <label class="mdl-textfield__label" for="messageField">Type your message...</label>
+                        </div>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Send
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
